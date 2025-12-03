@@ -1,0 +1,42 @@
+name: Weekly Spider Tasks
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # 每周一凌晨2点运行（可自行调整）
+  workflow_dispatch:       # 允许手动触发
+
+jobs:
+  run-spiders:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # 允许 push
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        pip install requests beautifulsoup4 openpyxl pandas
+
+    - name: Run script 1（抓取 含撤销 的公告）
+      run: |
+        python spiders/cx.py
+
+    - name: Run script 2（遍历 1–27 页）
+      run: |
+        python spiders/current.py
+
+    - name: Commit & Push results
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git add -A
+        git commit -m "Update spider results $(date -u '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+        git push
