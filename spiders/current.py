@@ -43,7 +43,7 @@ def safe_get(url, max_attempts=3, timeout=(10, 30)):
     """带额外异常处理的 GET，返回 text 或 None"""
     for attempt in range(1, max_attempts + 1):
         try:
-            resp = session.get(url, headers=HEADERS, timeout=timeout, verify=VERIFY_SSL)
+            resp = session.get(url, headers=headers, timeout=timeout, verify=VERIFY_SSL)
             # 如果状态码不在 200-399，抛出异常触发重试逻辑
             resp.raise_for_status()
             # 确保正确编码
