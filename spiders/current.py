@@ -10,16 +10,18 @@ BASE_URL = "https://zwfw.spb.gov.cn/sj/310000/pfyycsml?currentPage={}"
 ROOT = "https://zwfw.spb.gov.cn"
 
 # 配置 headers（模拟浏览器）
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
     "Accept-Language": "zh-CN,zh;q=0.9",
-    "Referer": "https://zwfw.spb.gov.cn/"
+    "Referer": "https://zwfw.spb.gov.cn/",
+    "Connection": "keep-alive",
+    "Cache-Control": "max-age=0",
+    "Upgrade-Insecure-Requests": "1"
 }
-
 # 建立带重试机制的 Session
 session = requests.Session()
+session.headers.update(headers)
 retries = Retry(
     total=5,
     backoff_factor=2,                    # 失败后退避间隔：1s,2s,4s...
